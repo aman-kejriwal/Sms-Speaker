@@ -26,28 +26,21 @@ public class MessageReceiver extends BroadcastReceiver {
             String msg_from;
             if(bundle!=null){
                 Toast.makeText(context,"message came",Toast.LENGTH_SHORT).show();
-//                try{
-//                    Object[]pdus=(Object[])bundle.get("pdus");
-//                    msgs=new SmsMessage[pdus.length];
-//                    for(int i=0;i< msgs.length;i++){
-//                        msgs[i]=SmsMessage.createFromPdu((byte[])pdus[i]);
-//                        msg_from=msgs[i].getOriginatingAddress();
-//                        final String msgBody=msgs[i].getMessageBody();
-//                        textToSpeech = new TextToSpeech(context.getApplicationContext(), new TextToSpeech.OnInitListener() {
-//                            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-//                            @Override
-//                            public void onInit(int status) {
-//                                textToSpeech.setLanguage(Locale.forLanguageTag("hin"));
-//                                textToSpeech.speak(msgBody, TextToSpeech.QUEUE_FLUSH, null, null);
-//                            }
-//                        });
-//                        Toast.makeText(context, "from "+msg_from+" ,Body: "+msgBody, Toast.LENGTH_SHORT).show();
-//                    }
-//                }
-//                catch (Exception e ){
-//                    e.printStackTrace();
-//                }
-                speak("hello world", context);
+                try{
+                    Object[]pdus=(Object[])bundle.get("pdus");
+                    msgs=new SmsMessage[pdus.length];
+                    for(int i=0;i< msgs.length;i++){
+                        msgs[i]=SmsMessage.createFromPdu((byte[])pdus[i]);
+                        msg_from=msgs[i].getOriginatingAddress();
+                        final String msgBody=msgs[i].getMessageBody();
+                        speak(msgBody, context);
+                        Toast.makeText(context, "from "+msg_from+" ,Body: "+msgBody, Toast.LENGTH_SHORT).show();
+                    }
+                }
+                catch (Exception e ){
+                    e.printStackTrace();
+                }
+
             }
         }
         Toast.makeText(context, "SMS receivedp", Toast.LENGTH_SHORT).show();

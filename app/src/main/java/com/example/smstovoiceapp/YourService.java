@@ -35,16 +35,14 @@ public class YourService extends Service {
         MessageReceiver screenOnOffReceiver = new MessageReceiver();
         registerReceiver(screenOnOffReceiver, intentFilter);
         //
-        String channelId = "My channel ID";
         NotificationCompat.Builder notificationBuilder =
-                new NotificationCompat.Builder(this, channelId)
+                new NotificationCompat.Builder(this, MainActivity.channelId)
                         .setSmallIcon(R.drawable.ic_launcher_foreground)
                         .setContentTitle("My new notification")
-                        .setContentText("aman")
-                        .setAutoCancel(true);
+                        .setContentText("aman");
         startForeground(100,notificationBuilder.build());
         //
-        Toast.makeText(this,"BackGround Task works", Toast.LENGTH_LONG).show();
+        Toast.makeText(this,"BackGround Task starts", Toast.LENGTH_LONG).show();
 //        return super.onStartCommand(intent, flags, startId);
         return START_STICKY;
     }

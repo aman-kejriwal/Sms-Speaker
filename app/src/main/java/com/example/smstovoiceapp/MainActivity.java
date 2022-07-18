@@ -5,9 +5,12 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -26,10 +29,30 @@ public class MainActivity extends AppCompatActivity {
         checkPermissions();
         setListeners();
 
-        Intent backgroundService = new Intent(getApplicationContext(), SpeakerService.class);
-        startService(backgroundService);
-        Intent backgroundService2 = new Intent(getApplicationContext(), MessageReceiver.class);
-        startService(backgroundService2);
+        // since you are using notification in yourservice.class first create a channel
+        createNotificationChann();
+        //start foregroudn service
+        Intent i = new Intent(getApplicationContext(),YourService.class);
+        ContextCompat.startForegroundService(getApplicationContext(),i);
+
+//        Intent backgroundService = new Intent(getApplicationContext(), SpeakerService.class);
+//        startService(backgroundService);
+//        Intent backgroundService2 = new Intent(getApplicationContext(), MessageReceiver.class);
+//        startService(backgroundService2);
+    }
+    public static String channelId = "My channel ID";
+    private void createNotificationChann(){
+        // Notification Channel is required for >= Oreo, otherwise notification will not show up
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            NotificationChannel serviceChannel = new NotificationChannel(
+                    channelId,
+                    "Service Channel",
+                    NotificationManager.IMPORTANCE_DEFAULT
+            );
+            serviceChannel.setSound(null,null);
+            NotificationManager manager = getSystemService(NotificationManager.class);
+            manager.createNotificationChannel(serviceChannel);
+        }
     }
     private void setListeners() {
         testButton = findViewById(R.id.testButton);
@@ -41,9 +64,9 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "randomNumber", Toast.LENGTH_SHORT).show();
                 String message = String.format("Credited. %s Rupees.", randomNumber);
                 Context context = getApplicationContext();
-                Intent serviceIntent = new Intent(context, SpeakerService.class);
-                serviceIntent.putExtra(SpeakerService.MESSAGE, message);
-                context.startService(serviceIntent);
+//                Intent serviceIntent = new Intent(context, SpeakerService.class);
+//                serviceIntent.putExtra(SpeakerService.MESSAGE, message);
+//                context.startService(serviceIntent);
             }
         });
     }
